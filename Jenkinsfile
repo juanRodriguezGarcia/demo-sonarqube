@@ -16,8 +16,8 @@ pipeline {
     parameters {
         choice(
             name: 'BRANCH_SELECTION',
-            choices: ['main', 'develop'],
-            description: '¿Desde qué rama quieres ejecutar el análisis?'
+            choices: ['', 'main', 'develop'],
+            description: '¿Desde qué rama quieres ejecutar el análisis? (vacío = rama actual)'
         )
     }
     
@@ -28,13 +28,17 @@ pipeline {
                     def currentBranch = env.GIT_BRANCH ?: 'main'
                     echo "Rama actual detectada: ${currentBranch}"
                     
-                    if (params.BRANCH_SELECTION) {
+                    if (params.BRANCH_SELECTION && params.BRANCH_SELECTION != '') {
                         checkout scm: [
                             $class: 'GitSCM',
                             branches: [[name: "*/${params.BRANCH_SELECTION}"]],
                             userRemoteConfigs: scm.userRemoteConfigs
                         ]
                         echo "Cambiado a rama: ${params.BRANCH_SELECTION}"
+                        env.ANALYSIS_BRANCH = params.BRANCH_SELECTION
+                    } else {
+                        echo "Usando rama actual: ${currentBranch}"
+                        env.ANALYSIS_BRANCH = currentBranch.replaceAll('origin/', '')
                     }
                 }
             }
@@ -60,19 +64,24 @@ pipeline {
         
         stage('SonarQube Analysis') {
             steps {
-                sh """
-                    sonar-scanner \
-                        -Dsonar.projectKey=${PROJECT_KEY} \
-                        -Dsonar.projectName=${PROJECT_NAME} \
-                        -Dsonar.sources=src \
-                        -Dsonar.exclusions=**/node_modules/**,**/coverage/**,**/*.test.js \
-                        -Dsonar.inclusions=**/*.js \
-                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-                        -Dsonar.testExecutionReportPaths=coverage/test-report.xml \
-                        -Dsonar.coverage.exclusions=**/*.test.js,**/*.spec.js \
-                        -Dsonar.host.url=${SONAR_URL} \
-                        -Dsonar.login=${SONAR_TOKEN}
-                """
+                script {
+                    def branchParam = env.ANALYSIS_BRANCH && env.ANALYSIS_BRANCH != 'main' ? "-Dsonar.branch.name=${env.ANALYSIS_BRANCH}" : ""
+                    
+                    sh """
+                        sonar-scanner \
+                            -Dsonar.projectKey=${PROJECT_KEY} \
+                            -Dsonar.projectName=${PROJECT_NAME} \
+                            -Dsonar.sources=src \
+                            -Dsonar.exclusions=**/node_modules/**,**/coverage/**,**/*.test.js \
+                            -Dsonar.inclusions=**/*.js \
+                            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                            -Dsonar.testExecutionReportPaths=coverage/test-report.xml \
+                            -Dsonar.coverage.exclusions=**/*.test.js,**/*.spec.js \
+                            ${branchParam} \
+                            -Dsonar.host.url=${SONAR_URL} \
+                            -Dsonar.login=${SONAR_TOKEN}
+                    """
+                }
             }
         }
         
@@ -106,7 +115,7 @@ pipeline {
             script {
                 echo "=== RESUMEN DEL ANÁLISIS ==="
                 echo "Proyecto: ${PROJECT_NAME}"
-                echo "Rama analizada: ${params.BRANCH_SELECTION ?: env.GIT_BRANCH}"
+                echo "Rama analizada: ${env.ANALYSIS_BRANCH}"
                 echo "URL SonarQube: ${SONAR_URL}/dashboard?id=${PROJECT_KEY}"
                 
                 if (currentBuild.result == 'FAILURE') {
