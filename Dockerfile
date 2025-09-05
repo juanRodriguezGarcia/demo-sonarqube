@@ -9,7 +9,7 @@ RUN apk add --no-cache \
 # Definir JAVA_HOME
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
-
+ENV SONAR_SCANNER_OPTS="-Djava.home=${JAVA_HOME}"
 
 # Instalar SonarQube Scanner
 ENV SONAR_SCANNER_VERSION=5.0.1.3006
