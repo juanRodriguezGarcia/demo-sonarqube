@@ -33,6 +33,9 @@ ENV PATH="/opt/sonar-scanner/bin:${PATH}"
 RUN npm config set cache /tmp/.npm
 RUN npm config set prefix /tmp/.npm-global
 ENV PATH=/tmp/.npm-global/bin:$PATH
+RUN mkdir -p /home/node/.npm && chmod -R 777 /home/node/.npm
+# Configurar npm para usarlo
+ENV NPM_CONFIG_CACHE=/home/node/.npm
 
 WORKDIR /workspace
 
