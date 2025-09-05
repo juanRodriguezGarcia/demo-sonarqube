@@ -29,6 +29,11 @@ RUN curl -L -o /tmp/sonarscanner.zip \
 ENV SONAR_SCANNER_OPTS="-Djava.home=${JAVA_HOME}"
 ENV PATH="/opt/sonar-scanner/bin:${PATH}"
 
+# Configurar NPM para usar /tmp en vez de /.npm o /usr/local/etc
+RUN npm config set cache /tmp/.npm
+RUN npm config set prefix /tmp/.npm-global
+ENV PATH=/tmp/.npm-global/bin:$PATH
+
 WORKDIR /workspace
 
 # Comprobar instalación (esto fallará si algo no quedó bien)

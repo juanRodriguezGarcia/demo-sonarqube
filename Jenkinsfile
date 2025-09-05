@@ -1,10 +1,10 @@
 pipeline {
+    //additionalBuildArgs '--no-cache'
     agent {
         dockerfile {
             filename 'Dockerfile'
             args ''
             additionalBuildArgs '--no-cache'
-
         }
     }
     
