@@ -84,7 +84,7 @@ pipeline {
                 }
             }
         }
-        
+        //http://192.168.10.148:9000/api/qualitygates/project_status?projectKey=proyecname
         stage('Quality Gate') {
             steps {
                 script {
