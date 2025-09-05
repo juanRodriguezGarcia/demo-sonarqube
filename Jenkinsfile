@@ -7,10 +7,8 @@ pipeline {
     }
     
     environment {
-        SONAR_URL = 'http://host.docker.internal:9000'
         PROJECT_KEY = 'proyecname'
         PROJECT_NAME = 'proyecname'
-        SONAR_TOKEN = credentials('sonar-token')
     }
     
     parameters {
@@ -65,22 +63,22 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    def branchParam = env.ANALYSIS_BRANCH && env.ANALYSIS_BRANCH != 'main' ? "-Dsonar.branch.name=${env.ANALYSIS_BRANCH}" : ""
-                    
-                    sh """
-                        sonar-scanner \
-                            -Dsonar.projectKey=${PROJECT_KEY} \
-                            -Dsonar.projectName=${PROJECT_NAME} \
-                            -Dsonar.sources=src \
-                            -Dsonar.exclusions=**/node_modules/**,**/coverage/**,**/*.test.js \
-                            -Dsonar.inclusions=**/*.js \
-                            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-                            -Dsonar.testExecutionReportPaths=coverage/test-report.xml \
-                            -Dsonar.coverage.exclusions=**/*.test.js,**/*.spec.js \
-                            ${branchParam} \
-                            -Dsonar.host.url=${SONAR_URL} \
-                            -Dsonar.login=${SONAR_TOKEN}
-                    """
+                    withSonarQubeEnv('SonarQube') {
+                        def branchParam = env.ANALYSIS_BRANCH && env.ANALYSIS_BRANCH != 'main' ? "-Dsonar.branch.name=${env.ANALYSIS_BRANCH}" : ""
+                        
+                        sh """
+                            sonar-scanner \
+                                -Dsonar.projectKey=${env.PROJECT_KEY} \
+                                -Dsonar.projectName=${env.PROJECT_NAME} \
+                                -Dsonar.sources=src \
+                                -Dsonar.exclusions=**/node_modules/**,**/coverage/**,**/*.test.js \
+                                -Dsonar.inclusions=**/*.js \
+                                -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                                -Dsonar.testExecutionReportPaths=coverage/test-report.xml \
+                                -Dsonar.coverage.exclusions=**/*.test.js,**/*.spec.js \
+                                ${branchParam}
+                        """
+                    }
                 }
             }
         }
@@ -88,22 +86,16 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script {
-                    sleep(10)
-                    sh """
-                        curl -u ${SONAR_TOKEN}: \
-                        "${SONAR_URL}/api/qualitygates/project_status?projectKey=${PROJECT_KEY}" \
-                        -o qg_result.json
-                    """
-                    
-                    def qgResult = readJSON file: 'qg_result.json'
-                    def status = qgResult.projectStatus.status
-                    
-                    if (status != 'OK') {
-                        echo "❌ FALLÓ: Quality Gate status: ${status}"
-                        currentBuild.result = 'FAILURE'
-                        error("Quality Gate falló: ${status}")
-                    } else {
-                        echo "✅ PASÓ: Quality Gate exitoso"
+                    timeout(time: 5, unit: 'MINUTES') {
+                        def qg = waitForQualityGate()
+                        
+                        if (qg.status != 'OK') {
+                            echo "❌ FALLÓ: Quality Gate status: ${qg.status}"
+                            currentBuild.result = 'FAILURE'
+                            error("Quality Gate falló: ${qg.status}")
+                        } else {
+                            echo "✅ PASÓ: Quality Gate exitoso"
+                        }
                     }
                 }
             }
@@ -114,9 +106,9 @@ pipeline {
         always {
             script {
                 echo "=== RESUMEN DEL ANÁLISIS ==="
-                echo "Proyecto: ${PROJECT_NAME}"
+                echo "Proyecto: ${env.PROJECT_NAME}"
                 echo "Rama analizada: ${env.ANALYSIS_BRANCH}"
-                echo "URL SonarQube: ${SONAR_URL}/dashboard?id=${PROJECT_KEY}"
+                echo "URL SonarQube: Configurado en Jenkins/dashboard?id=${env.PROJECT_KEY}"
                 
                 if (currentBuild.result == 'FAILURE') {
                     echo "Estado: ❌ FALLÓ - Revisa los issues en SonarQube"
