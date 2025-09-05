@@ -1,15 +1,15 @@
 FROM node:22-alpine
 
-# Instalar dependencias
-RUN apt-get update && apt-get install -y \
+# Instalar dependencias en Alpine
+RUN apk add --no-cache \
     curl \
     unzip \
-    openjdk-17-jdk \
-    && rm -rf /var/lib/apt/lists/*
+    openjdk17
 
 # Definir JAVA_HOME
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
 
 # Instalar SonarQube Scanner
 ENV SONAR_SCANNER_VERSION=5.0.1.3006
