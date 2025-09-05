@@ -71,6 +71,7 @@ pipeline {
                             sonar-scanner \
                                 -Dsonar.projectKey=${env.PROJECT_KEY} \
                                 -Dsonar.projectName=${env.PROJECT_NAME} \
+                                -Dsonar.host.url=http://192.168.10.148:9000 \
                                 -Dsonar.sources=src \
                                 -Dsonar.exclusions=**/node_modules/**,**/coverage/**,**/*.test.js \
                                 -Dsonar.inclusions=**/*.js \
