@@ -16,7 +16,7 @@ pipeline {
     parameters {
         choice(
             name: 'BRANCH_SELECTION',
-            choices: ['', 'master', 'develop'],
+            choices: ['', 'master', 'develop','feature/uno'],
             description: '¿Desde qué rama quieres ejecutar el análisis? (vacío = rama actual)'
         )
     }
@@ -66,7 +66,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv('SonarQube') {
-                        def branchParam = env.ANALYSIS_BRANCH && env.ANALYSIS_BRANCH != 'main' ? "-Dsonar.branch.name=${env.ANALYSIS_BRANCH}" : ""
+                        def branchParam = env.ANALYSIS_BRANCH && env.ANALYSIS_BRANCH != 'master' ? "-Dsonar.branch.name=${env.ANALYSIS_BRANCH}" : ""
                         
                         sh """
                             sonar-scanner \
