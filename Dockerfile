@@ -6,9 +6,11 @@ RUN apk add --no-cache \
     unzip \
     openjdk17
 
-# Definir JAVA_HOME
+# Definir JAVA_HOME y PATH
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+# Forzar Sonar Scanner a usar el Java del sistema
 ENV SONAR_SCANNER_OPTS="-Djava.home=${JAVA_HOME}"
 
 # Instalar SonarQube Scanner
