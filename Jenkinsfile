@@ -8,8 +8,8 @@ pipeline {
     }
     
     environment {
-        PROJECT_KEY = 'proyecname'
-        PROJECT_NAME = 'proyecname'
+        PROJECT_KEY = 'proyecname-1'
+        PROJECT_NAME = 'proyecname-1'
     }
     
     parameters {
