@@ -4,7 +4,6 @@ pipeline {
         dockerfile {
             filename 'Dockerfile'
             args ''
-            additionalBuildArgs '--no-cache'
         }
     }
     
