@@ -93,9 +93,16 @@ function processData(data) {
   return result.length; // Acceso a propiedad de null
 }
 
-// Bug: Undefined variable
+// Bug: Literal usado como función
 function calculateTotal() {
-  return undefinedVariable + 10; // Variable no declarada
+  const number = 42;
+  return number(); // Intentando llamar un número como función
+}
+
+// Bug: String usado como función
+function processText() {
+  const text = "hello";
+  return text(); // Intentando llamar un string como función
 }
 
 module.exports = {
@@ -108,5 +115,6 @@ module.exports = {
   getUserEmail,
   getFirstItem,
   processData,
-  calculateTotal
+  calculateTotal,
+  processText
 };
