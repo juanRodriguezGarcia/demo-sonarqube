@@ -78,6 +78,7 @@ pipeline {
                                 -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
                                 -Dsonar.testExecutionReportPaths=coverage/test-report.xml \
                                 -Dsonar.coverage.exclusions=**/*.test.js,**/*.spec.js \
+                                -Dsonar.newCode.referenceBranch=master \
                                 ${branchParam}
                         """
                     }
