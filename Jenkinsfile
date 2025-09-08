@@ -15,7 +15,7 @@ pipeline {
     parameters {
         choice(
             name: 'BRANCH_SELECTION',
-            choices: ['', 'master', 'develop','feature/uno'],
+            choices: ['master', 'master', 'develop','feature/uno'],
             description: '¿Desde qué rama quieres ejecutar el análisis? (vacío = rama actual)'
         )
     }
