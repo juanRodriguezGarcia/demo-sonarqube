@@ -87,6 +87,15 @@ function getFirstItem(items) {
   return items[0]; // Error si items está vacío
 }
 
+// Bug: Infinite loop
+function processItems(items) {
+  let i = 0;
+  while (i >= 0) { // Condición siempre verdadera
+    console.log(items[i]);
+    i++; // Nunca se vuelve negativo
+  }
+}
+
 module.exports = {
   processUser,
   getUserProperty,
@@ -95,5 +104,6 @@ module.exports = {
   calculateEmployeeAge,
   divide,
   getUserEmail,
-  getFirstItem
+  getFirstItem,
+  processItems
 };
