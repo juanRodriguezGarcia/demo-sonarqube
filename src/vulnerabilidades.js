@@ -1,60 +1,99 @@
-// Archivo con vulnerabilidades para testing de SonarQube
+const crypto = require('crypto');
 
-// Vulnerabilidad: SQL Injection
-function getUserData(userId) {
-    const query = "SELECT * FROM users WHERE id = " + userId;
-    return query;
+// Bug corregido: control de JSON.parse
+try {
+  const payload = '{"id":123}';
+  const obj = JSON.parse(payload);
+  console.log(obj.id);
+} catch (err) {
+  console.error("Error parseando JSON:", err.message);
 }
 
-// Vulnerabilidad: XSS
-function displayMessage(message) {
-    document.innerHTML = message;
+// Vulnerabilidad corregida: no usar eval
+const userInput = "console.log('Hola')";
+console.log("Entrada segura:", userInput);
+
+// Refactor: función corta y genérica
+function processUser(user) {
+  Object.entries(user).forEach(([k,v]) => console.log(`${k}: ${v}`));
 }
 
-// Vulnerabilidad: Hardcoded credentials
-const API_KEY = "12345-secret-key";
-const PASSWORD = "admin123";
+// Evitar duplicación
+function getUserProperty(user, prop) {
+  return user[prop];
+}
 
-// Vulnerabilidad: Weak cryptography
-function simpleHash(data) {
-    return data.split('').reverse().join('');
+// Security Hotspot corregido: usar SHA256
+const hash = crypto.createHash('sha256').update('password123').digest('hex');
+
+processUser({name:"Juan", age:30, email:"juan@mail.com", phone:"1234"});
+console.log("Nombre usuario:", getUserProperty({name:"Juan"}, "name"));
+console.log("Email usuario:", getUserProperty({email:"juan@mail.com"}, "email"));
+console.log("SHA256 hash:", hash);
+
+// MAINTAINABILITY ISSUES
+
+// Code Smell: Función muy larga y compleja
+function processComplexData(data, type, format, options, callback, errorHandler, validator, transformer) {
+  if (type === 'user') {
+    if (format === 'json') {
+      if (options.validate) {
+        if (validator) {
+          if (validator(data)) {
+            if (transformer) {
+              const transformed = transformer(data);
+              if (callback) {
+                callback(transformed);
+              }
+            }
+          } else {
+            if (errorHandler) {
+              errorHandler('Validation failed');
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Code Smell: Duplicación de código
+function calculateUserAge(birthYear) {
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - birthYear;
+  return age;
+}
+
+function calculateEmployeeAge(birthYear) {
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - birthYear;
+  return age;
+}
+
+// RELIABILITY ISSUES
+
+// Bug: División por cero no controlada
+function divide(a, b) {
+  return a / b; // Puede retornar Infinity
+}
+
+// Bug: Acceso a propiedades sin validar
+function getUserEmail(user) {
+  return user.profile.email; // Error si user o profile son null/undefined
+}
+
+// Bug: Array access sin verificar bounds
+function getFirstItem(items) {
+  return items[0]; // Error si items está vacío
 }
 
 module.exports = {
-    getUserData,
-    displayMessage,
-    API_KEY,
-    PASSWORD,
-    simpleHash
+  processUser,
+  getUserProperty,
+  processComplexData,
+  calculateUserAge,
+  calculateEmployeeAge,
+  divide,
+  getUserEmail,
+  getFirstItem
 };
-
-const crypto = require('crypto');
-
-// Bug: JSON mal formado
-const payload = '{"id":123';
-const obj = JSON.parse(payload);
-console.log(obj.id);
-
-// Vulnerabilidad: uso de eval
-const userInput = "console.log('Hacked!')";
-eval(userInput);
-
-// Code Smell: función larga y repetitiva
-function processUser(user) {
-  console.log("Nombre: " + user.name);
-  console.log("Edad: " + user.age);
-  console.log("Correo: " + user.email);
-  console.log("Teléfono: " + user.phone);
-}
-
-// Duplicación de código
-function getUserName(user) { return user.name; }
-function getUserEmail(user) { return user.email; }
-
-// Security Hotspot: hash inseguro
-const hash = crypto.createHash('md5').update('password123').digest('hex');
-
-processUser({name:"Juan", age:30, email:"juan@mail.com", phone:"1234"});
-console.log("Nombre usuario:", getUserName({name:"Juan"}));
-console.log("Email usuario:", getUserEmail({email:"juan@mail.com"}));
-console.log("MD5 hash:", hash);
