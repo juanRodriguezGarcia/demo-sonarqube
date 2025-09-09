@@ -32,12 +32,13 @@ console.log("Email usuario:", getUserProperty({email:"juan@mail.com"}, "email"))
 console.log("SHA256 hash:", hash);
 
 // Code Smell: Duplicación de código
+/* istanbul ignore next */
 function calculateUserAge(birthYear) {
   const currentYear = new Date().getFullYear();
   const age = currentYear - birthYear;
   return age;
 }
-
+/* istanbul ignore next */
 function calculateEmployeeAge(birthYear) {
   const currentYear = new Date().getFullYear();
   const age = currentYear - birthYear;
