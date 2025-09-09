@@ -97,7 +97,7 @@ pipeline {
                             currentBuild.result = 'FAILURE'
                             error("Quality Gate falló: ${qg.status}")
                         } else {
-                            echo "✅ PASÓ: Quality Gate exitoso"
+                            echo "✅ PASÓ: Quality Gate exitoso:${qg.status}"
                         }
                     }
                 }
