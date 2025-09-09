@@ -74,7 +74,7 @@ function processText() {
 
 // Bug: Regex mal formado (Reliability)
 function validateEmail(email) {
-  const regex = new RegExp('['); // Regex inválido
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
 }
 
