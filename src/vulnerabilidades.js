@@ -37,3 +37,9 @@ function calculateUserAge(birthYear) {
   const age = currentYear - birthYear;
   return age;
 }
+
+function calculateEmployeeAge(birthYear) {
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - birthYear;
+  return age;
+}
