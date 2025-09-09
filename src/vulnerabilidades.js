@@ -5,9 +5,9 @@ const payload = '{"id":123';
 const obj = JSON.parse(payload);
 console.log(obj.id);
 
-// Vulnerabilidad: uso de eval
-const userInput = "console.log('Hacked!')";
-eval(userInput);
+// Vulnerabilidad corregida: no usar eval
+const userInput = "console.log('Hola')";
+console.log("Entrada segura:", userInput);
 
 // Code Smell: función larga y repetitiva
 function processUser(user) {
