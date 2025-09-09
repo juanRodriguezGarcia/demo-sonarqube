@@ -1,35 +1,34 @@
 const crypto = require('crypto');
 
-// Bug corregido: control de JSON.parse
-try {
-  const payload = '{"id":123}';
-  const obj = JSON.parse(payload);
-  console.log(obj.id);
-} catch (err) {
-  console.error("Error parseando JSON:", err.message);
-}
+// Bug: JSON mal formado
+const payload = '{"id":123';
+const obj = JSON.parse(payload);
+console.log(obj.id);
 
-// Vulnerabilidad corregida: no usar eval
-const userInput = "console.log('Hola')";
-console.log("Entrada segura:", userInput);
+// Vulnerabilidad: uso de eval
+const userInput = "console.log('Hacked!')";
+eval(userInput);
 
-// Refactor: función corta y genérica
+// Code Smell: función larga y repetitiva
 function processUser(user) {
-  Object.entries(user).forEach(([k,v]) => console.log(`${k}: ${v}`));
+  console.log("Nombre: " + user.name);
+  console.log("Edad: " + user.age);
+  console.log("Correo: " + user.email);
+  console.log("Teléfono: " + user.phone);
 }
 
-// Evitar duplicación
-function getUserProperty(user, prop) {
-  return user[prop];
-}
+// Duplicación de código
+function getUserName(user) { return user.name; }
+function getUserEmail(user) { return user.email; }
 
-// Security Hotspot corregido: usar SHA256
-const hash = crypto.createHash('sha256').update('password123').digest('hex');
+// Security Hotspot: hash inseguro
+const hash = crypto.createHash('md5').update('password123').digest('hex');
 
 processUser({name:"Juan", age:30, email:"juan@mail.com", phone:"1234"});
-console.log("Nombre usuario:", getUserProperty({name:"Juan"}, "name"));
-console.log("Email usuario:", getUserProperty({email:"juan@mail.com"}, "email"));
-console.log("SHA256 hash:", hash);
+console.log("Nombre usuario:", getUserName({name:"Juan"}));
+console.log("Email usuario:", getUserEmail({email:"juan@mail.com"}));
+console.log("MD5 hash:", hash);
+
 
 // MAINTAINABILITY ISSUES
 
@@ -135,6 +134,22 @@ function leakMemory() {
   return data;
 }
 
+// RESPONSIBILITY - Vulnerabilidades de Seguridad
+function insecureAuth(password) {
+  if (password === 'admin123') { // Hardcoded password
+    return true;
+  }
+  return false;
+}
+
+function executeCommand(userInput) {
+  eval(userInput); // Command injection vulnerability
+}
+
+function unsafeRedirect(url) {
+  window.location = url; // Open redirect vulnerability
+}
+
 module.exports = {
   processUser,
   getUserProperty,
@@ -150,5 +165,8 @@ module.exports = {
   validateEmail,
   unsafeOperation,
   confusingLogic,
-  leakMemory
+  leakMemory,
+  insecureAuth,
+  executeCommand,
+  unsafeRedirect
 };
