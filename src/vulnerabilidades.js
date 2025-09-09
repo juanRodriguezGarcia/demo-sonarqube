@@ -28,3 +28,113 @@ processUser({name:"Juan", age:30, email:"juan@mail.com", phone:"1234"});
 console.log("Nombre usuario:", getUserName({name:"Juan"}));
 console.log("Email usuario:", getUserEmail({email:"juan@mail.com"}));
 console.log("MD5 hash:", hash);
+
+
+// RELIABILITY ISSUES
+
+// Bug: División por cero no controlada
+function divide(a, b) {
+  return a / b; // Puede retornar Infinity
+}
+
+// RELIABILITY ISSUES
+
+// Bug: División por cero no controlada
+function divide(a, b) {
+  return a / b; // Puede retornar Infinity
+}
+
+// Bug: Acceso a propiedades sin validar
+function getUserEmail(user) {
+  return user.profile.email; // Error si user o profile son null/undefined
+}
+
+// Bug: Array access sin verificar bounds
+function getFirstItem(items) {
+  return items[0]; // Error si items está vacío
+}
+
+// Bug: Null pointer exception
+function processData(data) {
+  const result = null;
+  return result.length; // Acceso a propiedad de null
+}
+
+// Bug: Literal usado como función
+function calculateTotal() {
+  const number = 42;
+  return number(); // Intentando llamar un número como función
+}
+
+// Bug: String usado como función
+function processText() {
+  const text = "hello";
+  return text(); // Intentando llamar un string como función
+}
+
+// Bug: Regex mal formado (Reliability)
+function validateEmail(email) {
+  const regex = new RegExp('['); // Regex inválido
+  return regex.test(email);
+}
+
+// RESPONSIBILITY - Impacta Reliability Rating
+function unsafeOperation() {
+  try {
+    JSON.parse('{invalid json}'); // Parsing inseguro
+  } catch(e) {
+    // Silenciar errores es irresponsable
+  }
+}
+
+// INTENTIONALITY - Código no intencional
+function confusingLogic(x) {
+  if (x = 5) { // Asignación en lugar de comparación
+    return true;
+  }
+  return false;
+}
+
+// RESPONSIBILITY - Manejo irresponsable de recursos
+function leakMemory() {
+  const data = new Array(1000000).fill('data');
+  // No se libera la memoria
+  return data;
+}
+
+// RESPONSIBILITY - Vulnerabilidades de Seguridad
+function insecureAuth(password) {
+  if (password === 'admin123') { // Hardcoded password
+    return true;
+  }
+  return false;
+}
+
+function executeCommand(userInput) {
+  eval(userInput); // Command injection vulnerability
+}
+
+function unsafeRedirect(url) {
+  window.location = url; // Open redirect vulnerability
+}
+
+module.exports = {
+  processUser,
+  getUserProperty,
+  processComplexData,
+  calculateUserAge,
+  calculateEmployeeAge,
+  divide,
+  getUserEmail,
+  getFirstItem,
+  processData,
+  calculateTotal,
+  processText,
+  validateEmail,
+  unsafeOperation,
+  confusingLogic,
+  leakMemory,
+  insecureAuth,
+  executeCommand,
+  unsafeRedirect
+};
