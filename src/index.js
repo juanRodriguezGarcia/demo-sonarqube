@@ -18,3 +18,5 @@ function calculateEmployeeAge(birthYear) {
   let edad=age;
   return edad;
 }
+
+module.exports = { calculateEmployeeAge };
