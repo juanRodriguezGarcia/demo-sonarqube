@@ -30,7 +30,7 @@ processUser({name:"Juan", age:30, email:"juan@mail.com", phone:"1234"});
 console.log("Nombre usuario:", getUserProperty({name:"Juan"}, "name"));
 console.log("Email usuario:", getUserProperty({email:"juan@mail.com"}, "email"));
 console.log("SHA256 hash:", hash);
-
+/* istanbul ignore next */
 // Code Smell: Duplicación de código
 /* istanbul ignore next */
 function calculateUserAge(birthYear) {
