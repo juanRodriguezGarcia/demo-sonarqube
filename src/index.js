@@ -17,3 +17,5 @@ function calculateEmployeeAge(birthYear) {
   const age = currentYear - birthYear;
   return age;
 }
+
+module.exports = { calculateEmployeeAge };
