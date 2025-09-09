@@ -105,6 +105,17 @@ function processText() {
   return text(); // Intentando llamar un string como función
 }
 
+// Bug: Regex mal formado (Reliability)
+function validateEmail(email) {
+  const regex = new RegExp('['); // Regex inválido
+  return regex.test(email);
+}
+
+// Bug: Recursión infinita (Reliability)
+function factorial(n) {
+  return n * factorial(n); // Sin condición de parada
+}
+
 module.exports = {
   processUser,
   getUserProperty,
@@ -116,5 +127,7 @@ module.exports = {
   getFirstItem,
   processData,
   calculateTotal,
-  processText
+  processText,
+  validateEmail,
+  factorial
 };
