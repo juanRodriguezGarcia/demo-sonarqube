@@ -111,9 +111,28 @@ function validateEmail(email) {
   return regex.test(email);
 }
 
-// Bug: Recursión infinita (Reliability)
-function factorial(n) {
-  return n * factorial(n); // Sin condición de parada
+// RESPONSIBILITY - Impacta Reliability Rating
+function unsafeOperation() {
+  try {
+    JSON.parse('{invalid json}'); // Parsing inseguro
+  } catch(e) {
+    // Silenciar errores es irresponsable
+  }
+}
+
+// INTENTIONALITY - Código no intencional
+function confusingLogic(x) {
+  if (x = 5) { // Asignación en lugar de comparación
+    return true;
+  }
+  return false;
+}
+
+// RESPONSIBILITY - Manejo irresponsable de recursos
+function leakMemory() {
+  const data = new Array(1000000).fill('data');
+  // No se libera la memoria
+  return data;
 }
 
 module.exports = {
@@ -129,5 +148,7 @@ module.exports = {
   calculateTotal,
   processText,
   validateEmail,
-  factorial
+  unsafeOperation,
+  confusingLogic,
+  leakMemory
 };
