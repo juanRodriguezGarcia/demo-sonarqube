@@ -1,6 +1,6 @@
 {
     "sonarlint.connectedMode.project": {
         "connectionId": "http-192-168-10-148-9000-juan",
-        "projectKey": "proyecname-1"
+        "projectKey": "proyecname-2"
     }
 }
