@@ -8,8 +8,8 @@ pipeline {
     }
     
     environment {
-        PROJECT_KEY = 'proyecname-1'
-        PROJECT_NAME = 'proyecname-1'
+        PROJECT_KEY = 'proyecname-2'
+        PROJECT_NAME = 'proyecname-2'
     }
     
     parameters {
@@ -77,7 +77,7 @@ pipeline {
                                 -Dsonar.inclusions=**/*.js \
                                 -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
                                 -Dsonar.testExecutionReportPaths=coverage/test-report.xml \
-                                -Dsonar.coverage.exclusions=**/*.test.js,**/*.spec.js,**/vulnerabilidades.js \
+                                -Dsonar.coverage.exclusions=**/*.test.js,**/*.spec.js \
                                 -Dsonar.newCode.referenceBranch=master \
                                 ${branchParam}
                         """
