@@ -26,6 +26,30 @@ function getUserProperty(user, prop) {
   return user[prop];
 }
 
+// MAINTAINABILITY - Función compleja
+function processComplexData(data, type, format, options, callback, errorHandler, validator, transformer) {
+  if (type === 'user') {
+    if (format === 'json') {
+      if (options.validate) {
+        if (validator) {
+          if (validator(data)) {
+            if (transformer) {
+              const transformed = transformer(data);
+              if (callback) {
+                callback(transformed);
+              }
+            }
+          } else {
+            if (errorHandler) {
+              errorHandler('Validation failed');
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 // Security Hotspot: hash inseguro
 const hash = crypto.createHash('sha256').update('password123').digest('hex');
 
