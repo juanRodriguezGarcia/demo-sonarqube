@@ -78,6 +78,19 @@ function validateEmail(email) {
   return regex.test(email);
 }
 
+// Code Smell: Duplicación de código
+function calculateUserAge(birthYear) {
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - birthYear;
+  return age;
+}
+
+function calculateEmployeeAge(birthYear) {
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - birthYear;
+  return age;
+}
+
 // RESPONSIBILITY - Impacta Reliability Rating
 function unsafeOperation() {
   try {
