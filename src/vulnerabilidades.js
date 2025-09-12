@@ -1,9 +1,11 @@
 const crypto = require('crypto');
 
-// Bug: JSON mal formado
-const payload = '{"id":123';
-const obj = JSON.parse(payload);
-console.log(obj.id);
+// Bug: JSON mal formado (movido a función para evitar error en import)
+function parseInvalidJSON() {
+  const payload = '{"id":123';
+  const obj = JSON.parse(payload);
+  console.log(obj.id);
+}
 
 // Vulnerabilidad corregida: no usar eval
 const userInput = "console.log('Hola')";
@@ -53,10 +55,13 @@ function processComplexData(data, type, format, options, callback, errorHandler,
 // Security Hotspot: hash inseguro
 const hash = crypto.createHash('sha256').update('password123').digest('hex');
 
-processUser({name:"Juan", age:30, email:"juan@mail.com", phone:"1234"});
-console.log("Nombre usuario:", getUserName({name:"Juan"}));
-console.log("Email usuario:", getUserEmail({email:"juan@mail.com"}));
-console.log("sha256 hash:", hash);
+// Código de ejemplo movido a función
+function runExamples() {
+  processUser({name:"Juan", age:30, email:"juan@mail.com", phone:"1234"});
+  console.log("Nombre usuario:", getUserName({name:"Juan"}));
+  console.log("Email usuario:", getUserEmail({email:"juan@mail.com"}));
+  console.log("sha256 hash:", hash);
+}
 
 
 // RELIABILITY ISSUES
@@ -171,5 +176,7 @@ module.exports = {
   leakMemory,
   insecureAuth,
   executeCommand,
-  unsafeRedirect
+  unsafeRedirect,
+  parseInvalidJSON,
+  runExamples
 };
