@@ -27,4 +27,4 @@ function calculateEmployeeAge2(birthYear) {
   return edad;
 }
 
-module.exports = { calculateEmployeeAge };
+module.exports = { calculateEmployeeAge, calculateEmployeeAge2 };
