@@ -19,7 +19,7 @@ function processUser(user) {
 
 // Duplicación de código
 function getUserName(user) { return user.name; }
-function getUserEmail(user) { return user.email; }
+
 
 // Función genérica
 function getUserProperty(user, prop) {
