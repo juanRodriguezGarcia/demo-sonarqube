@@ -89,7 +89,7 @@ function unsafeOperation() {
 
 // INTENTIONALITY - Código no intencional
 function confusingLogic(x) {
-  if (x == 5) { // Asignación en lugar de comparación
+  if (x = 5) { // Asignación en lugar de comparación
     return true;
   }
   return false;

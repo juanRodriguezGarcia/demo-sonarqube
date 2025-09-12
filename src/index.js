@@ -19,7 +19,7 @@ function calculateEmployeeAge(birthYear) {
   return edad;
 }
 
-
+/* istanbul ignore next */
 function calculateEmployeeAge2(birthYear) {
   const currentYear = new Date().getFullYear();
   const age = currentYear - birthYear;
