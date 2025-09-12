@@ -22,12 +22,12 @@ function getUserName(user) { return user.name; }
 function getUserEmail(user) { return user.email; }
 
 // Security Hotspot: hash inseguro
-const hash = crypto.createHash('md5').update('password123').digest('hex');
+const hash = crypto.createHash('sha256').update('password123').digest('hex');
 
 processUser({name:"Juan", age:30, email:"juan@mail.com", phone:"1234"});
 console.log("Nombre usuario:", getUserName({name:"Juan"}));
 console.log("Email usuario:", getUserEmail({email:"juan@mail.com"}));
-console.log("MD5 hash:", hash);
+console.log("sha256 hash:", hash);
 
 
 // RELIABILITY ISSUES
