@@ -21,6 +21,11 @@ function processUser(user) {
 function getUserName(user) { return user.name; }
 function getUserEmail(user) { return user.email; }
 
+// Función genérica
+function getUserProperty(user, prop) {
+  return user[prop];
+}
+
 // Security Hotspot: hash inseguro
 const hash = crypto.createHash('sha256').update('password123').digest('hex');
 
@@ -29,13 +34,6 @@ console.log("Nombre usuario:", getUserName({name:"Juan"}));
 console.log("Email usuario:", getUserEmail({email:"juan@mail.com"}));
 console.log("sha256 hash:", hash);
 
-
-// RELIABILITY ISSUES
-
-// Bug: División por cero no controlada
-function divide(a, b) {
-  return a / b; // Puede retornar Infinity
-}
 
 // RELIABILITY ISSUES
 
