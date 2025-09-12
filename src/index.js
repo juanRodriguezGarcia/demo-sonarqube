@@ -12,14 +12,6 @@ function calculateUserAge(birthYear) {
   return age;
 }
 
-function calculateEmployeeAge(birthYear) {
-  const currentYear = new Date().getFullYear();
-  const age = currentYear - birthYear;
-  let edad=age;
-  return edad;
-}
-
-
 function calculateEmployeeAge2(birthYear) {
   const currentYear = new Date().getFullYear();
   const age = currentYear - birthYear;
@@ -27,4 +19,4 @@ function calculateEmployeeAge2(birthYear) {
   return edad;
 }
 
-module.exports = { calculateEmployeeAge, calculateEmployeeAge2 };
+module.exports = { calculateEmployeeAge2 };
